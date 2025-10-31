@@ -47,4 +47,23 @@ export class CheckoutPage{
     async clickOnPlaceOrder(){
         await this.placeOrder.click();
     }
+
+    async verifyListItems(products: any[][]) {
+        for(let i = 0; i < products.length; i++) {
+            const actualItemListInfo = [];
+            const item = this.page.locator('.cart_item').nth(i);
+
+            const itemName = await item.locator('.product-name').innerText();
+            actualItemListInfo.push(itemName);
+
+            const itemPrice = await item.locator('.woocommerce-Price-amount').innerText();
+            actualItemListInfo.push(itemPrice);
+
+            const itemQuantity = await item.locator('.product-quantity').getAttribute('value');
+            actualItemListInfo.push(itemQuantity);
+
+            expect(actualItemListInfo).toEqual(products[i]);
+        }
+    }
+
 }

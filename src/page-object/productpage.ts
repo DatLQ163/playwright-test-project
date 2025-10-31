@@ -22,7 +22,9 @@ export class ProductPage{
         await this.page.locator('.content-product').nth(randomIndex).click();
     }
 
-
+    async chooseProduct(productName: string) {
+        await this.page.getByRole('link', { name: productName, exact: true }).click();
+    }
 
 
 }

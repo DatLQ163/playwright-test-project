@@ -22,6 +22,7 @@ export class HomePage{
 
     async gotoCartPage(){
         await this.cartIconButton.click();
+
     }
 
 }

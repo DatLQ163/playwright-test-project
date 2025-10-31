@@ -10,7 +10,11 @@ export class AccountPage{
         await this.allDepartment.click();
     }
 
-    async selectPage(pageName: string){
+    async selectDepartmentsMenu(pageName: string){
         await this.page.getByRole('link', { name: ` ${pageName}` }).click();
+    }
+
+    async selectMenuBar(pageName: string){
+        await this.page.getByRole('link', { name: `${pageName}` }).click();
     }
 }

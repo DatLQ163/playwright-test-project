@@ -2,7 +2,7 @@ import { Page } from "@playwright/test";
 
 export class ProductInfoPage{
     readonly addToCartButton = this.page.getByRole('button',{name:'ADD TO CART'});
-    readonly productName = this.page.locator('.product_title');
+    readonly productName = this.page.locator('.product_title').first();
     readonly productPrice = this.page.getByRole('paragraph').filter({ hasText: '$' });
     readonly productAmount = this.page.getByRole('spinbutton');
 
@@ -23,6 +23,10 @@ export class ProductInfoPage{
 
     async addToCart(){
         await this.addToCartButton.click();
+    }
+
+    async getPrdInfoList() {
+        return [await this.storeProductName(), await this.storeProductPrice(), await this.storeProductAmount()];
     }
 
 }

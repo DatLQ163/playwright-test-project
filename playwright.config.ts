@@ -33,6 +33,7 @@ export default defineConfig({
     trace: 'on-first-retry',
     headless: false,
     viewport: null,
+    storageState: undefined, // không lưu trạng thái đăng nhập
   },
 
   /* Configure projects for major browsers */
