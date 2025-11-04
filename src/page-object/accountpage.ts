@@ -15,6 +15,10 @@ export class AccountPage{
     }
 
     async selectMenuBar(pageName: string){
-        await this.page.getByRole('link', { name: `${pageName}` }).click();
+        await this.page.getByRole('link', { name: `${pageName}` }).first().click();
+    }
+
+    async selectPage(optionName: string) {
+        await this.page.getByRole('link', { name: ` ${optionName}` }).click();
     }
 }

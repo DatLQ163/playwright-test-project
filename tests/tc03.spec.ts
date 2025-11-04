@@ -10,7 +10,7 @@ import { OrderPage } from "page-object/orderpage";
 import { ProductInfoPage } from "page-object/productinfopage";
 import { ProductPage } from "page-object/productpage";
 
-test("TC02 - Verify users can buy multiple item successfully", async ({page})=>{
+test("TC03 - Verify users can buy an item using different payment methods (all payment methods", async ({page})=>{
     const homePage = new HomePage(page);
     const loginPage = new LoginPage(page);
     const accountPage = new AccountPage(page);
@@ -31,32 +31,21 @@ test("TC02 - Verify users can buy multiple item successfully", async ({page})=>{
     // Step 3: Go to Shop page
     await accountPage.selectMenuBar(PAGE_NAV.SHOP);
 
-    // Step 4: Select multiple items and add to cart
+    // Step 4: Select an item and add to cart
     await productPage.chooseProduct('Beats Solo3 Wireless On-Ear');
-    const prd1 = await productInfoPage.getPrdInfoList();
     await productInfoPage.addToCart();
-    await page.goBack();
-    
 
-    await productPage.chooseProduct('Bose SoundLink Mini');
-    const prd2 = await productInfoPage.getPrdInfoList();
-    await productInfoPage.addToCart();
-    await page.goBack();
-    
-    await new Promise(r => setTimeout(r, 5000));
-    // Step 5: Go to the cart and verify all selected items
+    // Step 5: Go to Checkout page
     await basePage.gotoCartPage();
-    const prdList =[prd1,prd2];
-    await cartPage.verifyListItems(prdList);
-
-    // Step 6: Proceed to checkout and confirm order
     await cartPage.checkOut();
-    await cartPage.verifyListItems(prdList);
 
-    // Step 7: Verify order confirmation message
+    // Step 6: Choose a different payment method (Direct bank transfer, Cash on delivery)
+    await checkoutPage.choosePaymentMethod('Direct bank transfer');
+
+    // Step 7: Complete the payment process
     await checkoutPage.fillBillingDetail({firstName: 'Dat', lastName: "Le",country: "Vietnam",street: "Tran Quoc Toan",town: "Da Nang",phone: "123456789",email: "dat.le@agest.vn"});
     await checkoutPage.clickOnPlaceOrder();
-    await orderPage.verifyOrderPageDisplay();
-    await orderPage.verifyListItems(prdList);
 
+    // Step 8: Verify order confirmation message
+    await orderPage.verifyOrderConfirmationMessage();
 })

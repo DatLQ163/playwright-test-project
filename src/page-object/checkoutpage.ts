@@ -66,4 +66,8 @@ export class CheckoutPage{
         }
     }
 
+    async choosePaymentMethod(method: string) {
+        await this.page.getByText(`${method}`).click();
+    }
+
 }

@@ -2,10 +2,14 @@ import { expect, Page } from "@playwright/test";
 
 export class OrderPage{
     readonly orderStatus = this.page.locator('.woocommerce-notice--success');
+    readonly orderNumber = this.page.locator('.woocommerce-order-overview__order');
+    readonly orderDate = this.page.locator('.woocommerce-order-overview__date');
+    readonly paymentMethod = this.page.locator('.woocommerce-order-overview__payment-method');
     readonly orderProductName = this.page.locator('.order_item .woocommerce-table__product-name');
     readonly orderProductAmount = this.page.locator('.order_item .product-quantity');
     readonly orderProductPrice = this.page.locator('.order_item .woocommerce-Price-amount');
     readonly billingDetail = this.page.locator('.woocommerce-customer-details');
+    readonly orderConfirmationMessage =  this.page.getByText('Thank you. Your order has been received.');
 
     constructor(private page: Page){}
 
@@ -50,4 +54,21 @@ export class OrderPage{
             expect(actualItemListInfo).toEqual(products[i]);
         }
     }
+
+    async verifyOrderConfirmationMessage(){
+        await expect(this.orderConfirmationMessage).toBeVisible();
+    }
+
+    async getOrderInfo(){
+        let orderInfo: string[] = [];
+        orderInfo.push(await this.orderNumber.innerText());
+        orderInfo.push(await this.orderDate.innerText());
+        orderInfo.push(await this.paymentMethod.innerText());
+        orderInfo.push(await this.orderProductName.innerText());
+        orderInfo.push(await this.orderProductAmount.innerText());
+        orderInfo.push(await this.orderProductPrice.innerText());  
+        
+        return orderInfo;
+    }
+
 }

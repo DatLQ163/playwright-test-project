@@ -5,6 +5,7 @@ export class HomePage{
     readonly loginButton = this.page.getByRole('link', { name: 'Log in / Sign up' });
     readonly cartIconButton = this.page.getByRole('link').filter({hasText: '$'});
     readonly pageLogo = this.page.locator('.et_element.et_b_header-logo > a').first();
+    readonly accountIcon = this.page.locator('.header-top .account-type1');
 
     constructor(private page: Page){
     }
@@ -20,9 +21,8 @@ export class HomePage{
         await this.loginButton.click();
     }
 
-    async gotoCartPage(){
-        await this.cartIconButton.click();
-
+    async gotoAccountPage(){
+        await this.accountIcon.click();
     }
 
 }

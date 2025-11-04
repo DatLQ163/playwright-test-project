@@ -44,4 +44,10 @@ export class CartPage{
         }
     }
 
+    async handleToClickCartIcon(){
+        if (!(await this.checkoutButton.isVisible())){
+            await this.cartIconButton.click()
+        }
+    }
+
 }

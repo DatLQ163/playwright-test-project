@@ -8,6 +8,7 @@ import { ProductInfoPage } from "page-object/productinfopage";
 import { CartPage } from "page-object/cartpage";
 import { CheckoutPage } from "page-object/checkoutpage";
 import { OrderPage } from "page-object/orderpage";
+import { BasePage } from "page-object/basepage";
 
 test("TC01 - Verify users can buy an item successfully", async ({page})=>{
     const homePage = new HomePage(page);
@@ -18,6 +19,7 @@ test("TC01 - Verify users can buy an item successfully", async ({page})=>{
     const cartPage = new CartPage(page);
     const checkoutPage = new CheckoutPage(page);
     const orderPage = new OrderPage(page);
+    const basePage = new BasePage(page);
 
     // Step 1: Open browser and navigate to page
     await homePage.navigate();
@@ -52,7 +54,7 @@ test("TC01 - Verify users can buy an item successfully", async ({page})=>{
     await productInfoPage.addToCart();
 
     // Step 10: Go to the cart
-    await homePage.gotoCartPage();
+    await basePage.gotoCartPage();
 
     // await new Promise(r => setTimeout(r, 5000));
 
