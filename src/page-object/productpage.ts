@@ -28,7 +28,13 @@ export class ProductPage{
     }
 
     async sortItems(sort: string) {
+        
+        await this.sortDropdown.click();
+        await this.sortDropdown.selectOption('Sort by popularity');
         await this.sortDropdown.selectOption(sort);
+        // await this.page.locator(`//select[@name='orderby']//option[@value='menu_order']`).click();
+        // await this.page.locator(`//select[@name='orderby']//option[@value='price']`).click();
+
     }
 
     async createListPrice():Promise<string[]>{
@@ -41,23 +47,24 @@ export class ProductPage{
     }
 
     async verifySortByPrice(type: string, listPrice: string[]){
-        if(type ='low to high'){
-            for(let i = 1; i < listPrice.length; i++){
-                if(listPrice[i]<=listPrice[i+1]){
-                    return true;
-                }else{
-                    return false;
+        let flag = 0;
+        if(type ==='low to high'){
+            for(let i = 1; i <= listPrice.length; i++){
+                if(listPrice[i]>listPrice[i+1]){
+                    console.log(listPrice[i])
+                    console.log(listPrice[i+1])
+                    flag = 1;
                 }
             }
         }else{
             for(let i = 1; i < listPrice.length; i++){
-                if(listPrice[i]>=listPrice[i+1]){
-                    return true;
-                }else{
-                    return false;
+                if(listPrice[i]<listPrice[i+1]){
+                    flag = 1;
                 }
             }
         }
+        console.log(flag)
+        if(flag===1){return false}else{return true}
     }
 
 }

@@ -1,4 +1,4 @@
-import { test } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 import { PAGE_NAV } from "dataTest/PageNav";
 import { AccountPage } from "page-object/accountpage";
 import { HomePage } from "page-object/homepage";
@@ -12,6 +12,7 @@ test("TC04 - Verify users can sort items by price", async ({page})=>{
     const productPage = new ProductPage(page);
 
     // Step 1: Open browser and navigate to page
+    
     await homePage.navigate();
 
     // Step 2: Login with valid credentials
@@ -28,6 +29,8 @@ test("TC04 - Verify users can sort items by price", async ({page})=>{
     await productPage.sortItems('Sort by price: low to high')
 
     // Step 6: Verify order of items
+    await new Promise(r => setTimeout(r, 5000));
     const listPrice = await productPage.createListPrice();
-    await productPage.verifySortByPrice('low to high', listPrice)
+    const result = await productPage.verifySortByPrice('low to high', listPrice)
+    expect(result).toEqual(true)
 })
