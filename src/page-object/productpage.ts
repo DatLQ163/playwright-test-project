@@ -1,7 +1,7 @@
 import { expect, Locator, Page } from "@playwright/test";
 
 export class ProductPage{
-    readonly sortDropdown: Locator = this.page.getByRole('combobox', { name: 'Shop order' });
+    readonly sortDropdown: Locator = this.page.locator('select.orderby');
 
     constructor(private page: Page){
     }
@@ -29,11 +29,9 @@ export class ProductPage{
 
     async sortItems(sort: string) {
         
-        await this.sortDropdown.click();
-        await this.sortDropdown.selectOption('Sort by popularity');
-        await this.sortDropdown.selectOption(sort);
-        // await this.page.locator(`//select[@name='orderby']//option[@value='menu_order']`).click();
-        // await this.page.locator(`//select[@name='orderby']//option[@value='price']`).click();
+        // await this.sortDropdown.click();
+        await this.sortDropdown.selectOption({ label: 'Default sorting' });
+        await this.sortDropdown.selectOption({ label: sort });
 
     }
 
