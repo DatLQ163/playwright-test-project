@@ -1,14 +1,15 @@
-import test from "@playwright/test";
-import { HomePage } from "page-object/homepage";
-import { LoginPage } from "page-object/loginpage";
-import { AccountPage } from "page-object/accountpage";
+import { HomePage } from "page-object/home-page";
+import { LoginPage } from "page-object/login-page";
+import { AccountPage } from "page-object/account-page";
 import { DEPARTMENTS } from "dataTest/Departments";
-import { ProductPage } from "page-object/productpage";
-import { ProductInfoPage } from "page-object/productinfopage";
-import { CartPage } from "page-object/cartpage";
-import { CheckoutPage } from "page-object/checkoutpage";
-import { OrderPage } from "page-object/orderpage";
-import { BasePage } from "page-object/basepage";
+import { ProductPage } from "page-object/product-page";
+import { ProductInfoPage } from "page-object/productinfo-page";
+import { CartPage } from "page-object/cart-page";
+import { CheckoutPage } from "page-object/checkout-page";
+import { OrderPage } from "page-object/order-page";
+import { BasePage } from "page-object/common-page";
+import { ACCOUNT } from "dataTest/Account";
+import { test } from "@playwright/test";
 
 test("TC01 - Verify users can buy an item successfully", async ({page})=>{
     const homePage = new HomePage(page);
@@ -26,7 +27,7 @@ test("TC01 - Verify users can buy an item successfully", async ({page})=>{
 
     // Step 2: Login with valid credentials
     await homePage.gotoLoginPage();
-    await loginPage.login();
+    await loginPage.login(ACCOUNT.USERNAME,ACCOUNT.PASSWORD);
 
     // Step 3: Navigate to All departments section
     await accountPage.navigateToAllDepartmentsSection();

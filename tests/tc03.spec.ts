@@ -1,14 +1,15 @@
 import { test } from "@playwright/test";
 import { PAGE_NAV } from "dataTest/PageNav";
-import { AccountPage } from "page-object/accountpage";
-import { BasePage } from "page-object/basepage";
-import { CartPage } from "page-object/cartpage";
-import { CheckoutPage } from "page-object/checkoutpage";
-import { HomePage } from "page-object/homepage";
-import { LoginPage } from "page-object/loginpage";
-import { OrderPage } from "page-object/orderpage";
-import { ProductInfoPage } from "page-object/productinfopage";
-import { ProductPage } from "page-object/productpage";
+import { AccountPage } from "page-object/account-page";
+import { BasePage } from "page-object/common-page";
+import { CartPage } from "page-object/cart-page";
+import { CheckoutPage } from "page-object/checkout-page";
+import { HomePage } from "page-object/home-page";
+import { LoginPage } from "page-object/login-page";
+import { OrderPage } from "page-object/order-page";
+import { ProductInfoPage } from "page-object/productinfo-page";
+import { ProductPage } from "page-object/product-page";
+import { ACCOUNT } from "dataTest/Account";
 
 test("TC03 - Verify users can buy an item using different payment methods (all payment methods", async ({page})=>{
     const homePage = new HomePage(page);
@@ -26,7 +27,7 @@ test("TC03 - Verify users can buy an item using different payment methods (all p
 
     // Step 2: Login with valid credentials
     await homePage.gotoLoginPage();
-    await loginPage.login();
+    await loginPage.login(ACCOUNT.USERNAME,ACCOUNT.PASSWORD);
 
     // Step 3: Go to Shop page
     await accountPage.selectMenuBar(PAGE_NAV.SHOP);

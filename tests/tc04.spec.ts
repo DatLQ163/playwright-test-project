@@ -1,9 +1,10 @@
 import { expect, test } from "@playwright/test";
+import { ACCOUNT } from "dataTest/Account";
 import { PAGE_NAV } from "dataTest/PageNav";
-import { AccountPage } from "page-object/accountpage";
-import { HomePage } from "page-object/homepage";
-import { LoginPage } from "page-object/loginpage";
-import { ProductPage } from "page-object/productpage";
+import { AccountPage } from "page-object/account-page";
+import { HomePage } from "page-object/home-page";
+import { LoginPage } from "page-object/login-page";
+import { ProductPage } from "page-object/product-page";
 
 test("TC04 - Verify users can sort items by price", async ({page})=>{
     const homePage = new HomePage(page);
@@ -17,7 +18,7 @@ test("TC04 - Verify users can sort items by price", async ({page})=>{
 
     // Step 2: Login with valid credentials
     await homePage.gotoLoginPage();
-    await loginPage.login();
+    await loginPage.login(ACCOUNT.USERNAME,ACCOUNT.PASSWORD);
 
     // Step 3: Go to Shop page
     await accountPage.selectMenuBar(PAGE_NAV.SHOP);
@@ -31,6 +32,6 @@ test("TC04 - Verify users can sort items by price", async ({page})=>{
     // Step 6: Verify order of items
     await new Promise(r => setTimeout(r, 5000));
     const listPrice = await productPage.createListPrice();
-    const result = await productPage.verifySortByPrice('low to high', listPrice)
+    const result = productPage.verifySortByPrice('low to high', listPrice)
     expect(result).toEqual(true)
 })
