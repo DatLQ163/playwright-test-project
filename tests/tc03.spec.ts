@@ -7,7 +7,7 @@ import { CheckoutPage } from "page-object/checkout-page";
 import { HomePage } from "page-object/home-page";
 import { LoginPage } from "page-object/login-page";
 import { OrderPage } from "page-object/order-page";
-import { ProductInfoPage } from "page-object/productinfo-page";
+import { ProductInfoPage } from "page-object/productInfo-page";
 import { ProductPage } from "page-object/product-page";
 import { ACCOUNT } from "dataTest/Account";
 

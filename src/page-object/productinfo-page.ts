@@ -21,7 +21,7 @@ export class ProductInfoPage {
   }
 
   async storeProductAmount() {
-    return this.productAmount.getAttribute("value");
+    return Number(await this.productAmount.getAttribute("value"));
   }
 
   async addToCart() {

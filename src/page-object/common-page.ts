@@ -2,10 +2,10 @@ import { Page } from "@playwright/test";
 import { OrderPage } from "./order-page";
 import { AccountPage } from "./account-page";
 import { ProductPage } from "./product-page";
-import { ProductInfoPage } from "./productinfo-page";
 import { CartPage } from "./cart-page";
 import { CheckoutPage } from "./checkout-page";
 import { PAGE_NAV } from "dataTest/PageNav";
+import { ProductInfoPage } from "./productInfo-page";
 
 export class BasePage {
   private readonly cartIconButton = this.page
@@ -67,5 +67,10 @@ export class BasePage {
     await this.checkoutPage.clickOnPlaceOrder();
 
     return this.orderPage.getOrderInfo();
+  }
+
+  async changeToNumber(stringNumber: any) {
+    const price = parseFloat(stringNumber.replace(/[^0-9.]/g, "")); // Lọc ký tự $, , ...
+    return price;
   }
 }

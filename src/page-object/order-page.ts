@@ -29,6 +29,8 @@ export class OrderPage {
     "Thank you. Your order has been received."
   );
 
+  private readonly emailErrorMessage = this.page.locator('#billing_email');
+
   constructor(private page: Page) {}
 
   async verifyOrderPageDisplay() {
@@ -100,5 +102,9 @@ export class OrderPage {
 
     console.log(orderInfo.get("number"));
     return orderInfo;
+  }
+
+  async verifyEmailErrorMessage(){
+    await expect(this.emailErrorMessage).toBeVisible();
   }
 }

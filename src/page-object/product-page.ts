@@ -17,8 +17,11 @@ export class ProductPage {
   }
 
   async chooseRandomProduct() {
+    await expect(this.page.locator(".content-product").last()).toBeVisible();
     const count = await this.page.locator(".content-product").count();
-    const randomIndex = Math.floor(Math.random() * count);
+    const randomProduct = Math.random() * count;
+    console.log(count);
+    const randomIndex = Math.floor(randomProduct);
     await this.page.locator(".content-product").nth(randomIndex).click();
   }
 

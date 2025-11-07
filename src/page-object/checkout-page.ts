@@ -68,7 +68,9 @@ export class CheckoutPage {
     await this.firstName.fill(billingInfo.firstName);
     await this.lastName.fill(billingInfo.lastName);
     await this.countryBox.click();
-    await this.page.getByRole("option", { name: `${billingInfo.country}` }).click();
+    await this.page
+      .getByRole("option", { name: `${billingInfo.country}` })
+      .click();
     await this.street.fill(billingInfo.street);
     await this.town.fill(billingInfo.town);
     await this.phone.fill(billingInfo.phone);

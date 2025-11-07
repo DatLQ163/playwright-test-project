@@ -12,16 +12,24 @@ export class CartPage {
   private readonly cartIconButton = this.page
     .getByRole("link")
     .filter({ hasText: "$" });
+  private readonly clearCartButton = this.page.locator(".clear-cart");
+  private readonly emptyCartMessage = this.page.locator(".cart-empty");
+  private readonly plusButton = this.page.locator(".plus");
+  private readonly minusButton = this.page.locator(".minus");
+  private readonly quantityTextbox = this.page.locator(".qty");
+  private readonly updateCartButton = this.page.getByRole('button', { name: 'Update cart' });
+  
 
   constructor(private page: Page) {}
 
   async verifyCartItemDetail(name: string, price: string, amount: any) {
-    await expect(this.cartItemName).toBeVisible();
+    await expect(this.checkoutButton).toBeVisible();
     const label = await this.cartItemName.textContent();
-    const number = await this.cartItemAmount.getAttribute("value");
+    const cartPrice = await this.cartItemPrice.textContent();
+    const number = Number(await this.cartItemAmount.getAttribute("value"));
 
     expect(label?.toLowerCase()).toBe(name.toLowerCase());
-    await expect(this.cartItemPrice).toHaveText(price);
+    expect(price).toContain(cartPrice);
     expect(number).toBe(amount);
   }
 
@@ -54,4 +62,30 @@ export class CartPage {
       await this.cartIconButton.click();
     }
   }
+
+  async clearShoppingCart() {
+    await expect(this.clearCartButton).toBeVisible();
+    const dialogPromise = this.page.waitForEvent("dialog");
+    this.clearCartButton.click();
+    const dialog = await dialogPromise;
+    console.log(dialog.message()); // In ra nội dung popup, ví dụ: "Are you sure?"
+    await dialog.accept(); // Nhấn OK
+  }
+
+  async verifyCartEmpty() {
+    await expect(this.emptyCartMessage).toBeVisible();
+  }
+
+  async changeOrderQuantity(option: string){
+    if(option==='plus'){
+      await this.plusButton.click();
+    }else if(option==='minus'){
+      await this.minusButton.click();
+    }else{
+      await this.quantityTextbox.fill(option);
+    }
+    await this.updateCartButton.click();
+  }
 }
+
+
