@@ -29,14 +29,14 @@ export class BasePage {
   //         await this.page.reload()
   //     }
   // }
-  async gotoCartPage(timeout = 10000) {
+  async gotoCartPage(timeout = 20000) {
     await Promise.race([
       (async () => {
         await this.cartIconButton.click();
 
         while (!(await this.checkoutButton.isVisible())) {
           await this.page.reload();
-          await this.page.waitForTimeout(500);
+          await this.page.waitForTimeout(1000);
         }
       })(),
       new Promise((_, reject) =>

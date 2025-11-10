@@ -43,6 +43,7 @@ test("TC09 - Verify users can update quantity of product in cart", async ({
 
   // Step 6: Verify quantity of added product
   await cartPage.verifyCartItemDetail(productName, productPrice, productAmount);
+  await cartPage.verifyTotalPrice(productPrice, productAmount);
 
   // Step 7: Click on Plus(+) button
   await cartPage.changeOrderQuantity("plus");
@@ -50,16 +51,21 @@ test("TC09 - Verify users can update quantity of product in cart", async ({
 
   // Step 8: Verify quantity of product and SUB TOTAL price
   await cartPage.verifyCartItemDetail(productName, productPrice, productAmount);
+  await cartPage.verifyTotalPrice(productPrice, productAmount);
 
   // Step 9: Enter 4 into quantity textbox then click on UPDATE CART button
   await cartPage.changeOrderQuantity("4");
   productAmount = 4;
   // Step 10: Verify quantity of product is 4 and SUB TOTAL price
   await cartPage.verifyCartItemDetail(productName, productPrice, productAmount);
+  await cartPage.verifyTotalPrice(productPrice, productAmount);
 
   // Step 11: Click on Minus(-) button
   await cartPage.changeOrderQuantity("minus");
   productAmount = productAmount - 1;
   // Step 12: Verify quantity of product and SUB TOTAL price
   await cartPage.verifyCartItemDetail(productName, productPrice, productAmount);
+  await cartPage.verifyTotalPrice(productPrice, productAmount);
+
+  await cartPage.checkOut();
 });

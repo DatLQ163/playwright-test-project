@@ -17,7 +17,8 @@ export class CartPage {
   private readonly plusButton = this.page.locator(".plus");
   private readonly minusButton = this.page.locator(".minus");
   private readonly quantityTextbox = this.page.locator(".qty");
-  private readonly updateCartButton = this.page.getByRole('button', { name: 'Update cart' });
+  private readonly updateCartButton = this.page.locator('button.gray');
+  private readonly totalPrice = this.page.locator('.product-subtotal .woocommerce-Price-amount');
   
 
   constructor(private page: Page) {}
@@ -82,9 +83,19 @@ export class CartPage {
     }else if(option==='minus'){
       await this.minusButton.click();
     }else{
-      await this.quantityTextbox.fill(option);
+      await this.quantityTextbox.fill(option)
+      await this.page.keyboard.press('Enter')
     }
-    await this.updateCartButton.click();
+    await expect(this.updateCartButton).toHaveAttribute('aria-disabled','false',{timeout:10000});
+    await expect(this.updateCartButton).toHaveAttribute('aria-disabled','true',{timeout:10000});
+  }
+
+  async verifyTotalPrice(price: any, amount: any){
+    const priceNumber = parseFloat(price.replace('$', ''));
+    const number = parseFloat(amount);
+    const total = (priceNumber*number).toString();
+    expect(await this.totalPrice.innerText()).toContain(total);
+    console.log(total)
   }
 }
 
