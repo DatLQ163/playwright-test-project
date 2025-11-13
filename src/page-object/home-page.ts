@@ -7,12 +7,8 @@ export class HomePage {
   private readonly loginButton = this.page.getByRole("link", {
     name: "Log in / Sign up",
   });
-  private readonly pageLogo = this.page
-    .locator(".et_element.et_b_header-logo > a")
-    .first();
-  private readonly accountIcon = this.page.locator(
-    ".header-top .account-type1"
-  );
+  private readonly pageLogo = this.page.locator(".et_element.et_b_header-logo > a").first();
+  private readonly accountIcon = this.page.locator(".header-top .account-type1");
 
   constructor(private page: Page) {}
 

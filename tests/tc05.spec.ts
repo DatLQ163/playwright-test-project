@@ -14,7 +14,7 @@ test("TC05 - Verify orders appear in order history", async ({ page }) => {
   // Pre-conditions: order and save product info
   await homePage.navigate();
   await homePage.gotoLoginPage();
-  await loginPage.login(ACCOUNT.USERNAME,ACCOUNT.PASSWORD);
+  await loginPage.login(ACCOUNT.USERNAME, ACCOUNT.PASSWORD);
   const orderInfo = await basePage.orderProduct();
 
   // Step 1: Go to My Account page

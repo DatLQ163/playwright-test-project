@@ -45,5 +45,4 @@ test("TC08 - Verify users can clear the cart", async ({ page }) => {
 
   // Step 6: Verify empty cart page displays
   await cartPage.verifyCartEmpty();
-
 });

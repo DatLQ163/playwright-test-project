@@ -6,13 +6,8 @@ export class AccountPage {
   private readonly orderDate = this.page.locator(".order-date");
   private readonly orderName = this.page.locator("td.product-name");
   private readonly orderAmount = this.page.locator(".product-quantity");
-  private readonly paymentMethod = this.page
-    .locator("tr")
-    .filter({ hasText: "Payment method:" })
-    .getByRole("cell");
-  private readonly orderPrice = this.page.locator(
-    "td.product-total .woocommerce-Price-amount"
-  );
+  private readonly paymentMethod = this.page.locator("tr").filter({ hasText: "Payment method:" }).getByRole("cell");
+  private readonly orderPrice = this.page.locator("td.product-total .woocommerce-Price-amount");
 
   constructor(private page: Page) {}
 
@@ -36,9 +31,7 @@ export class AccountPage {
   }
 
   async verifyOrderHistory(orderInfo: Map<string, string>) {
-    await expect(
-      this.page.locator("tr").filter({ hasText: orderInfo.get("number") })
-    ).toBeVisible();
+    await expect(this.page.locator("tr").filter({ hasText: orderInfo.get("number") })).toBeVisible();
 
     await this.page
       .locator("tr")

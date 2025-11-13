@@ -18,11 +18,9 @@ export class LoginPage {
   constructor(private page: Page) {}
 
   async login(user: string, pass: string) {
-    await this.acceptCookiesButton
-      .waitFor({ state: "visible", timeout: 5_000 })
-      .catch(() => {
-        console.log("No cookie consent popup found, continuing...");
-      });
+    await this.acceptCookiesButton.waitFor({ state: "visible", timeout: 5_000 }).catch(() => {
+      console.log("No cookie consent popup found, continuing...");
+    });
     if (await this.acceptCookiesButton.isVisible()) {
       await this.acceptCookiesButton.click();
     }

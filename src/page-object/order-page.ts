@@ -1,35 +1,20 @@
 import { expect, Page } from "@playwright/test";
+import { Product } from "type/productInfo-interface";
+import { CartPage } from "./cart-page";
 
 export class OrderPage {
-  private readonly orderStatus = this.page.locator(
-    ".woocommerce-notice--success"
-  );
-  private readonly orderNumber = this.page.locator(
-    ".woocommerce-order-overview__order strong"
-  );
-  private readonly orderDate = this.page.locator(
-    ".woocommerce-order-overview__date strong"
-  );
-  private readonly paymentMethod = this.page.locator(
-    ".woocommerce-order-overview__payment-method strong"
-  );
-  private readonly orderProductName = this.page.locator(
-    ".order_item .woocommerce-table__product-name"
-  );
-  private readonly orderProductAmount = this.page.locator(
-    ".order_item .product-quantity"
-  );
-  private readonly orderProductPrice = this.page.locator(
-    ".order_item .woocommerce-Price-amount"
-  );
-  private readonly billingDetail = this.page.locator(
-    ".woocommerce-customer-details"
-  );
-  private readonly orderConfirmationMessage = this.page.getByText(
-    "Thank you. Your order has been received."
-  );
+  private readonly orderStatus = this.page.locator(".woocommerce-notice--success");
+  private readonly orderNumber = this.page.locator(".woocommerce-order-overview__order strong");
+  private readonly orderDate = this.page.locator(".woocommerce-order-overview__date strong");
+  private readonly paymentMethod = this.page.locator(".woocommerce-order-overview__payment-method strong");
+  private readonly orderProductName = this.page.locator(".order_item .woocommerce-table__product-name");
+  private readonly orderProductAmount = this.page.locator(".order_item .product-quantity");
+  private readonly orderProductPrice = this.page.locator(".order_item .woocommerce-Price-amount");
+  private readonly billingDetail = this.page.locator(".woocommerce-customer-details");
+  private readonly orderConfirmationMessage = this.page.locator(".woocommerce-thankyou-order-received");
+  private readonly emailErrorMessage = this.page.locator("#billing_email");
 
-  private readonly emailErrorMessage = this.page.locator('#billing_email');
+  private readonly cartPage = new CartPage(this.page);
 
   constructor(private page: Page) {}
 
@@ -37,25 +22,13 @@ export class OrderPage {
     await this.orderStatus.isVisible();
   }
 
-  async verifyOrderDetail(name: string, price: string, amount: any) {
-    const label = await this.orderProductName.innerText();
-    const number = await this.orderProductAmount.innerText();
-    const cost = await this.orderProductPrice.innerText();
-
-    expect(label.toLowerCase()).toContain(name.toLowerCase());
-    expect(cost).toContain(price);
-    expect(number).toContain(amount);
+  async verifyOrderDetail(product: Product) {
+    expect((await this.orderProductName.innerText()).toLowerCase()).toContain(product.name.toLowerCase());
+    expect(this.orderProductAmount).toContainText(product.amount);
+    expect(this.orderProductPrice).toContainText(product.price);
   }
 
-  async verifyBillingDetail(billingInfo: {
-    firstName: string;
-    lastName: string;
-    country: string;
-    street: string;
-    town: string;
-    phone: string;
-    email: string;
-  }) {
+  async verifyBillingDetail(billingInfo: { firstName: string; lastName: string; country: string; street: string; town: string; phone: string; email: string }) {
     expect(this.billingDetail).toContainText(billingInfo.firstName);
     expect(this.billingDetail).toContainText(billingInfo.lastName);
     expect(this.billingDetail).toContainText(billingInfo.country);
@@ -63,6 +36,12 @@ export class OrderPage {
     expect(this.billingDetail).toContainText(billingInfo.town);
     expect(this.billingDetail).toContainText(billingInfo.email);
     expect(this.billingDetail).toContainText(billingInfo.phone);
+  }
+
+  async verifyListItems2(products: Product[]) {
+    for (const product of products) {
+      await this.cartPage.verifyCartItemDetail(product)
+    }
   }
 
   async verifyListItems(products: any[][]) {
@@ -73,14 +52,10 @@ export class OrderPage {
       const itemName = await item.locator(".product-name").innerText();
       actualItemListInfo.push(itemName);
 
-      const itemPrice = await item
-        .locator(".woocommerce-Price-amount")
-        .innerText();
+      const itemPrice = await item.locator(".woocommerce-Price-amount").innerText();
       actualItemListInfo.push(itemPrice);
 
-      const itemQuantity = await item
-        .locator(".product-quantity")
-        .getAttribute("value");
+      const itemQuantity = await item.locator(".product-quantity").getAttribute("value");
       actualItemListInfo.push(itemQuantity);
 
       expect(actualItemListInfo).toEqual(products[i]);
@@ -104,7 +79,7 @@ export class OrderPage {
     return orderInfo;
   }
 
-  async verifyEmailErrorMessage(){
+  async verifyEmailErrorMessage() {
     await expect(this.emailErrorMessage).toBeVisible();
   }
 }

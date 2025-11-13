@@ -8,12 +8,11 @@ import { PAGE_NAV } from "dataTest/PageNav";
 import { ProductInfoPage } from "./productInfo-page";
 
 export class BasePage {
-  private readonly cartIconButton = this.page
-    .getByRole("link")
-    .filter({ hasText: "$" });
+  private readonly cartIconButton = this.page.getByRole("link").filter({ hasText: "$" });
   private readonly checkoutButton = this.page.getByRole("link", {
     name: "Proceed to checkout",
   });
+  private readonly removeButton = this.page.locator("a.remove-item");
   private readonly orderPage = new OrderPage(this.page);
   private readonly accountPage = new AccountPage(this.page);
   private readonly productPage = new ProductPage(this.page);
@@ -39,13 +38,12 @@ export class BasePage {
           await this.page.waitForTimeout(1000);
         }
       })(),
-      new Promise((_, reject) =>
-        setTimeout(
-          () => reject(new Error(`gotoCartPage() timeout sau ${timeout}ms`)),
-          timeout
-        )
-      ),
+      new Promise((_, reject) => setTimeout(() => reject(new Error(`gotoCartPage() timeout sau ${timeout}ms`)), timeout)),
     ]);
+  }
+
+  async clickCartIcon() {
+    await this.cartIconButton.click();
   }
 
   async orderProduct() {
@@ -72,5 +70,16 @@ export class BasePage {
   async changeToNumber(stringNumber: any) {
     const price = parseFloat(stringNumber.replace(/[^0-9.]/g, "")); // Lọc ký tự $, , ...
     return price;
+  }
+
+  async resetData() {
+    await this.clickCartIcon();
+    await new Promise(r => setTimeout(r, 5000));
+    const removeBtnNumber = await this.removeButton.count();
+    for (let i = 1; i <= removeBtnNumber; i++) {
+      await this.removeButton.nth(0).click();
+    }
+    await this.accountPage.selectMenuBar(PAGE_NAV.SHOP);
+    await this.productPage.switchView("grid");
   }
 }

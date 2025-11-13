@@ -8,8 +8,7 @@ export class ProductPage {
   async verifyTypeViewShown(type: string) {
     await this.page.waitForTimeout(5000);
     // const viewType = await this.page.locator(`//a[@data-type='${type}']/..`).getAttribute('class');
-    await expect(this.page
-      .locator(`.switch-${type}`)).toHaveClass(/switcher-active/)
+    await expect(this.page.locator(`.switch-${type}`)).toHaveClass(/switcher-active/, { timeout: 10000 });
   }
 
   async switchView(option: string) {
@@ -26,9 +25,7 @@ export class ProductPage {
   }
 
   async chooseProduct(productName: string) {
-    await this.page
-      .getByRole("link", { name: productName, exact: true })
-      .click();
+    await this.page.getByRole("link", { name: productName, exact: true }).click();
   }
 
   async sortItems(sort: string) {
@@ -41,12 +38,7 @@ export class ProductPage {
     const totalProduct = await this.page.locator(".content-product").count();
     let listPrice: string[] = [];
     for (let i = 1; i < totalProduct; i++) {
-      listPrice.push(
-        await this.page
-          .locator(".content-product .woocommerce-Price-amount")
-          .nth(i)
-          .innerText()
-      );
+      listPrice.push(await this.page.locator(".content-product .woocommerce-Price-amount").nth(i).innerText());
     }
     return listPrice;
   }

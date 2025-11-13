@@ -10,10 +10,9 @@ import { OrderPage } from "page-object/order-page";
 import { ProductInfoPage } from "page-object/productInfo-page";
 import { ProductPage } from "page-object/product-page";
 import { ACCOUNT } from "dataTest/Account";
+import { Product } from "type/productInfo-interface";
 
-test("TC02 - Verify users can buy multiple item successfully", async ({
-  page,
-}) => {
+test("TC02 - Verify users can buy multiple item successfully", async ({ page }) => {
   const homePage = new HomePage(page);
   const loginPage = new LoginPage(page);
   const accountPage = new AccountPage(page);
@@ -30,30 +29,31 @@ test("TC02 - Verify users can buy multiple item successfully", async ({
   // Step 2: Login with valid credentials
   await homePage.gotoLoginPage();
   await loginPage.login(ACCOUNT.USERNAME, ACCOUNT.PASSWORD);
+  await basePage.resetData();
 
   // Step 3: Go to Shop page
   await accountPage.selectMenuBar(PAGE_NAV.SHOP);
 
   // Step 4: Select multiple items and add to cart
   await productPage.chooseProduct("Beats Solo3 Wireless On-Ear");
-  const prd1 = await productInfoPage.getPrdInfoList();
+  const prd1 = productInfoPage.getPrdInfoList();
   await productInfoPage.addToCart();
   await page.goBack();
 
   await productPage.chooseProduct("Bose SoundLink Mini");
-  const prd2 = await productInfoPage.getPrdInfoList();
+  const prd2  = productInfoPage.getPrdInfoList();
   await productInfoPage.addToCart();
   await page.goBack();
 
   await new Promise((r) => setTimeout(r, 5000));
   // Step 5: Go to the cart and verify all selected items
   await basePage.gotoCartPage();
-  const prdList = [prd1, prd2];
-  await cartPage.verifyListItems(prdList);
+  const prdList: Product[] = [prd1, prd2];
+  await cartPage.verifyListItems2(prdList);
 
   // Step 6: Proceed to checkout and confirm order
   await cartPage.checkOut();
-  await cartPage.verifyListItems(prdList);
+  await cartPage.verifyListItems2(prdList);
 
   // Step 7: Verify order confirmation message
   await checkoutPage.fillBillingDetail({
@@ -67,5 +67,5 @@ test("TC02 - Verify users can buy multiple item successfully", async ({
   });
   await checkoutPage.clickOnPlaceOrder();
   await orderPage.verifyOrderPageDisplay();
-  await orderPage.verifyListItems(prdList);
+  await orderPage.verifyListItems2(prdList);
 });

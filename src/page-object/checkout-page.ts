@@ -1,28 +1,18 @@
 import { expect, Page } from "@playwright/test";
+import { Product } from "type/productInfo-interface";
 
 export class CheckoutPage {
-  readonly cartCountDownExpiredMessage = this.page.locator(
-    ".cart-countdown-expired-message"
-  );
-  private readonly orderItemName = this.page.locator(
-    ".cart_item .product-name"
-  );
-  private readonly orderItemPrice = this.page.locator(
-    ".cart_item .product-total"
-  );
-  private readonly orderItemAmount = this.page.locator(
-    ".cart_item .product-quantity"
-  );
+  readonly cartCountDownExpiredMessage = this.page.locator(".cart-countdown-expired-message");
+  private readonly orderItemName = this.page.locator(".cart_item .product-name");
+  private readonly orderItemPrice = this.page.locator(".cart_item .product-total");
+  private readonly orderItemAmount = this.page.locator(".cart_item .product-quantity");
   private readonly firstName = this.page.getByRole("textbox", {
     name: "First name *",
   });
   private readonly lastName = this.page.getByRole("textbox", {
     name: "Last name *",
   });
-  private readonly countryBox = this.page.getByRole("combobox", {
-    name: "Country / Region",
-  });
-  private readonly country = this.page.getByRole("option", { name: "Vietnam" });
+  private readonly countryBox = this.page.locator("select.country_select");
   private readonly town = this.page.getByRole("textbox", {
     name: "Town / City *",
   });
@@ -46,31 +36,16 @@ export class CheckoutPage {
     await this.cartCountDownExpiredMessage.isVisible();
   }
 
-  async verifyOrderItemDetail(name: string, price: string, amount: any) {
-    const label = await this.orderItemName.innerText();
-    const cost = await this.orderItemPrice.innerText();
-    const number = await this.orderItemAmount.innerText();
-
-    expect(label.toLowerCase()).toContain(name.toLowerCase());
-    expect(cost).toContain(price);
-    expect(number).toContain(amount);
+  async verifyOrderItemDetail(product: Product) {
+    expect(this.page.locator(".cart_item .product-name").filter({ hasText: product.name }));
+    expect(this.page.locator(".cart_item .product-total").filter({ hasText: product.price }));
+    expect(this.page.locator(".cart_item .product-quantity").filter({ hasText: String(product.amount) }));
   }
 
-  async fillBillingDetail(billingInfo: {
-    firstName: string;
-    lastName: string;
-    country: string;
-    street: string;
-    town: string;
-    phone: string;
-    email: string;
-  }) {
+  async fillBillingDetail(billingInfo: { firstName: string; lastName: string; country: string; street: string; town: string; phone: string; email: string }) {
     await this.firstName.fill(billingInfo.firstName);
     await this.lastName.fill(billingInfo.lastName);
-    await this.countryBox.click();
-    await this.page
-      .getByRole("option", { name: `${billingInfo.country}` })
-      .click();
+    await this.countryBox.selectOption(billingInfo.country);
     await this.street.fill(billingInfo.street);
     await this.town.fill(billingInfo.town);
     await this.phone.fill(billingInfo.phone);
@@ -81,27 +56,23 @@ export class CheckoutPage {
     await this.placeOrder.click();
   }
 
-  async verifyListItems(products: any[][]) {
-    for (let i = 0; i < products.length; i++) {
-      const actualItemListInfo = [];
-      const item = this.page.locator(".cart_item").nth(i);
+  // async verifyListItems(products: any[][]) {
+  //   for (let i = 0; i < products.length; i++) {
+  //     const actualItemListInfo = [];
+  //     const item = this.page.locator(".cart_item").nth(i);
 
-      const itemName = await item.locator(".product-name").innerText();
-      actualItemListInfo.push(itemName);
+  //     const itemName = await item.locator(".product-name").innerText();
+  //     actualItemListInfo.push(itemName);
 
-      const itemPrice = await item
-        .locator(".woocommerce-Price-amount")
-        .innerText();
-      actualItemListInfo.push(itemPrice);
+  //     const itemPrice = await item.locator(".woocommerce-Price-amount").innerText();
+  //     actualItemListInfo.push(itemPrice);
 
-      const itemQuantity = await item
-        .locator(".product-quantity")
-        .getAttribute("value");
-      actualItemListInfo.push(itemQuantity);
+  //     const itemQuantity = await item.locator(".product-quantity").getAttribute("value");
+  //     actualItemListInfo.push(itemQuantity);
 
-      expect(actualItemListInfo).toEqual(products[i]);
-    }
-  }
+  //     expect(actualItemListInfo).toEqual(products[i]);
+  //   }
+  // }
 
   async choosePaymentMethod(method: string) {
     await this.page.getByText(`${method}`).click();

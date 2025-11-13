@@ -29,12 +29,11 @@ test("TC10 - Verify users can post a review", async ({ page }) => {
 
   // Step 5: Scroll down then click on REVIEWS tab
   await productInfoPage.clickReview();
-  const randomNumber = Math.floor(Math.random()*1000);
+  const randomNumber = Math.floor(Math.random() * 1000);
 
   // Step 6: Submit a review
-  await productInfoPage.submitReview('5',`comment-${(randomNumber)}`)
+  await productInfoPage.submitReview("5", `comment-${randomNumber}`);
 
   // Step 7: Verify new review
-  await productInfoPage.verifyReview('5',`comment-${(randomNumber)}`);
+  await productInfoPage.verifyReview("5", `comment-${randomNumber}`);
 });
-

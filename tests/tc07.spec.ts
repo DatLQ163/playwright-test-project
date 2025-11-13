@@ -9,9 +9,7 @@ import { OrderPage } from "page-object/order-page";
 import { ProductPage } from "page-object/product-page";
 import { ProductInfoPage } from "page-object/productInfo-page";
 
-test("TC07 - Ensure proper error handling when mandatory fields are blank", async ({
-  page,
-}) => {
+test("TC07 - Ensure proper error handling when mandatory fields are blank", async ({ page }) => {
   const homePage = new HomePage(page);
   const orderPage = new OrderPage(page);
   const basePage = new BasePage(page);

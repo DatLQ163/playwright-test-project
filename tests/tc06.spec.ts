@@ -3,9 +3,7 @@ import { BasePage } from "page-object/common-page";
 import { HomePage } from "page-object/home-page";
 import { OrderPage } from "page-object/order-page";
 
-test("TC06 - Verify users try to buy an item without logging in (As a guest)", async ({
-  page,
-}) => {
+test("TC06 - Verify users try to buy an item without logging in (As a guest)", async ({ page }) => {
   const homePage = new HomePage(page);
   const orderPage = new OrderPage(page);
   const basePage = new BasePage(page);
@@ -19,5 +17,5 @@ test("TC06 - Verify users try to buy an item without logging in (As a guest)", a
   // Step 5: Proceed to complete order
   await basePage.orderProduct();
 
-  await orderPage.verifyOrderConfirmationMessage()
+  await orderPage.verifyOrderConfirmationMessage();
 });

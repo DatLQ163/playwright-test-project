@@ -9,9 +9,7 @@ import { LoginPage } from "page-object/login-page";
 import { ProductPage } from "page-object/product-page";
 import { ProductInfoPage } from "page-object/productInfo-page";
 
-test("TC09 - Verify users can update quantity of product in cart", async ({
-  page,
-}) => {
+test("TC09 - Verify users can update quantity of product in cart", async ({ page }) => {
   const homePage = new HomePage(page);
   const basePage = new BasePage(page);
   const productPage = new ProductPage(page);
@@ -31,7 +29,7 @@ test("TC09 - Verify users can update quantity of product in cart", async ({
   await accountPage.selectMenuBar(PAGE_NAV.SHOP);
 
   // Step 4: Add a product
-  await productPage.chooseProduct("Beats Solo3 Wireless On-Ear");;
+  await productPage.chooseProduct("Beats Solo3 Wireless On-Ear");
   const productName = await productInfoPage.storeProductName();
   const productPrice = await productInfoPage.storeProductPrice();
   let productAmount = await productInfoPage.storeProductAmount();
