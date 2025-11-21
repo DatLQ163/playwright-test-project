@@ -2,6 +2,7 @@ import { expect, test } from "@playwright/test";
 import { ACCOUNT } from "dataTest/Account";
 import { PAGE_NAV } from "dataTest/PageNav";
 import { AccountPage } from "page-object/account-page";
+import { BasePage } from "page-object/common-page";
 import { HomePage } from "page-object/home-page";
 import { LoginPage } from "page-object/login-page";
 import { ProductPage } from "page-object/product-page";
@@ -11,6 +12,7 @@ test("TC04 - Verify users can sort items by price", async ({ page }) => {
   const loginPage = new LoginPage(page);
   const accountPage = new AccountPage(page);
   const productPage = new ProductPage(page);
+  const basePage = new BasePage(page);
 
   // Step 1: Open browser and navigate to page
 
@@ -19,6 +21,7 @@ test("TC04 - Verify users can sort items by price", async ({ page }) => {
   // Step 2: Login with valid credentials
   await homePage.gotoLoginPage();
   await loginPage.login(ACCOUNT.USERNAME, ACCOUNT.PASSWORD);
+  await basePage.resetData();
 
   // Step 3: Go to Shop page
   await accountPage.selectMenuBar(PAGE_NAV.SHOP);

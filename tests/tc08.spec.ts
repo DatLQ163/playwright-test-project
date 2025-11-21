@@ -8,6 +8,7 @@ import { HomePage } from "page-object/home-page";
 import { LoginPage } from "page-object/login-page";
 import { ProductPage } from "page-object/product-page";
 import { ProductInfoPage } from "page-object/productInfo-page";
+import { Product } from "type/productInfo-interface";
 
 test("TC08 - Verify users can clear the cart", async ({ page }) => {
   const homePage = new HomePage(page);
@@ -23,6 +24,7 @@ test("TC08 - Verify users can clear the cart", async ({ page }) => {
 
   await homePage.gotoLoginPage();
   await loginPage.login(ACCOUNT.USERNAME, ACCOUNT.PASSWORD);
+  await basePage.resetData();
 
   await accountPage.selectMenuBar(PAGE_NAV.SHOP);
 
@@ -30,6 +32,11 @@ test("TC08 - Verify users can clear the cart", async ({ page }) => {
   const productName = await productInfoPage.storeProductName();
   const productPrice = await productInfoPage.storeProductPrice();
   const productAmount = await productInfoPage.storeProductAmount();
+  const productInfo: Product = {
+    name: productName,
+    price: productPrice,
+    amount: productAmount,
+  };
   await productInfoPage.addToCart();
 
   // Step 1: Open browser and go to https://demo.testarchitect.com/
@@ -38,7 +45,7 @@ test("TC08 - Verify users can clear the cart", async ({ page }) => {
   await basePage.gotoCartPage();
 
   // Step 4: Verify items show in table
-  await cartPage.verifyCartItemDetail(productName, productPrice, productAmount);
+  await cartPage.verifyCartItemDetail(productInfo);
 
   // Step 5: Click on Clear shopping cart
   await cartPage.clearShoppingCart();

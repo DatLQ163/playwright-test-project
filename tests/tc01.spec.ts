@@ -57,14 +57,14 @@ test("TC01 - Verify users can buy an item successfully", async ({ page }) => {
   await accountPage.selectDepartmentsMenu(DEPARTMENTS.ELECTRONIC_COMPONENT_AND_SUPPLIES);
 
   // Step 5: Verify the items should be displayed as a grid
-  // await productPage.verifyTypeViewShown("grid");
+  await productPage.verifyTypeViewShown("grid");
 
   // Step 6: Switch view to list
-  // await productPage.switchView("list");
+  await productPage.switchView("list");
 
   // Step 7: Verify the items should be displayed as a list
-  // await productPage.verifyTypeViewShown("list");
-  // await productPage.switchView("grid");
+  await productPage.verifyTypeViewShown("list");
+  await productPage.switchView("grid");
 
   // Step 8: Select andy item randomly to purchase
   await productPage.chooseRandomProduct();

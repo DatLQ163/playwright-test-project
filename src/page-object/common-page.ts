@@ -32,7 +32,6 @@ export class BasePage {
     await Promise.race([
       (async () => {
         await this.cartIconButton.click();
-
         while (!(await this.checkoutButton.isVisible())) {
           await this.page.reload();
           await this.page.waitForTimeout(1000);
@@ -75,6 +74,7 @@ export class BasePage {
   async resetData() {
     await this.clickCartIcon();
     await new Promise(r => setTimeout(r, 5000));
+    await this.clickCartIcon();
     const removeBtnNumber = await this.removeButton.count();
     for (let i = 1; i <= removeBtnNumber; i++) {
       await this.removeButton.nth(0).click();

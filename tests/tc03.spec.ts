@@ -28,6 +28,7 @@ test("TC03 - Verify users can buy an item using different payment methods (all p
   // Step 2: Login with valid credentials
   await homePage.gotoLoginPage();
   await loginPage.login(ACCOUNT.USERNAME, ACCOUNT.PASSWORD);
+  await basePage.resetData();
 
   // Step 3: Go to Shop page
   await accountPage.selectMenuBar(PAGE_NAV.SHOP);

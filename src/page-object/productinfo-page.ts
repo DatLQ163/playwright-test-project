@@ -39,7 +39,7 @@ export class ProductInfoPage {
   }
 
   async clickReview() {
-    await this.reviewButton.click();
+    await this.reviewButton.first().click();
   }
 
   async submitReview(star: string, comment: string) {

@@ -1,6 +1,5 @@
 import { expect, Page } from "@playwright/test";
 import { Product } from "type/productInfo-interface";
-import { CartPage } from "./cart-page";
 
 export class OrderPage {
   private readonly orderStatus = this.page.locator(".woocommerce-notice--success");
@@ -14,8 +13,6 @@ export class OrderPage {
   private readonly orderConfirmationMessage = this.page.locator(".woocommerce-thankyou-order-received");
   private readonly emailErrorMessage = this.page.locator("#billing_email");
 
-  private readonly cartPage = new CartPage(this.page);
-
   constructor(private page: Page) {}
 
   async verifyOrderPageDisplay() {
@@ -23,24 +20,25 @@ export class OrderPage {
   }
 
   async verifyOrderDetail(product: Product) {
-    expect((await this.orderProductName.innerText()).toLowerCase()).toContain(product.name.toLowerCase());
-    expect(this.orderProductAmount).toContainText(product.amount);
-    expect(this.orderProductPrice).toContainText(product.price);
+    await expect(this.page.locator("tr").filter({ hasText: product.name })).toBeVisible();
+    await expect(this.page.locator("tr").filter({ hasText: product.name }).locator(".woocommerce-Price-amount")).toContainText(product.price);
+    await expect(this.page.locator("tr").filter({ hasText: product.name }).locator(".product-quantity")).toContainText(product.amount);
   }
 
   async verifyBillingDetail(billingInfo: { firstName: string; lastName: string; country: string; street: string; town: string; phone: string; email: string }) {
-    expect(this.billingDetail).toContainText(billingInfo.firstName);
-    expect(this.billingDetail).toContainText(billingInfo.lastName);
-    expect(this.billingDetail).toContainText(billingInfo.country);
-    expect(this.billingDetail).toContainText(billingInfo.street);
-    expect(this.billingDetail).toContainText(billingInfo.town);
-    expect(this.billingDetail).toContainText(billingInfo.email);
-    expect(this.billingDetail).toContainText(billingInfo.phone);
+    await this.billingDetail.waitFor({ state: "visible" });
+    await expect(this.billingDetail).toContainText(billingInfo.firstName);
+    await expect(this.billingDetail).toContainText(billingInfo.lastName);
+    await expect(this.billingDetail).toContainText(billingInfo.country);
+    await expect(this.billingDetail).toContainText(billingInfo.street);
+    await expect(this.billingDetail).toContainText(billingInfo.town);
+    await expect(this.billingDetail).toContainText(billingInfo.email);
+    await expect(this.billingDetail).toContainText(billingInfo.phone);
   }
 
   async verifyListItems2(products: Product[]) {
     for (const product of products) {
-      await this.cartPage.verifyCartItemDetail(product)
+      await this.verifyOrderDetail(product)
     }
   }
 
@@ -63,7 +61,7 @@ export class OrderPage {
   }
 
   async verifyOrderConfirmationMessage() {
-    await expect(this.orderConfirmationMessage).toBeVisible();
+    await expect(this.orderConfirmationMessage).toBeVisible({timeout:100000});
   }
 
   async getOrderInfo() {

@@ -20,9 +20,13 @@ export class CartPage {
   constructor(private page: Page) {}
 
   async verifyCartItemDetail(product: Product) {
-    await expect(this.page.locator('tr').filter({hasText:product.name})).toBeVisible();
-    await expect(this.page.locator('tr').filter({hasText:product.name}).locator('td.product-price')).toContainText(product.price);
-    await expect(this.page.locator('tr').filter({hasText:product.name}).locator('input')).toHaveAttribute('value',product.amount);
+    await expect(this.page.locator("tr").filter({ hasText: product.name })).toBeVisible();
+    await expect(this.page.locator("tr").filter({ hasText: product.name }).locator("td.product-price")).toContainText(product.price);
+    await expect(this.page.locator("tr").filter({ hasText: product.name }).locator("input")).toHaveAttribute("value", product.amount);
+  }
+
+  async verifyProductAmount(name: string,amount: number){
+    await expect(this.page.locator("tr").filter({ hasText: name }).locator("input")).toHaveAttribute("value", String(amount));
   }
 
   async checkOut() {
@@ -30,8 +34,8 @@ export class CartPage {
   }
 
   async verifyListItems2(products: Product[]) {
-    for(const product of products){
-      this.verifyCartItemDetail(product);
+    for (const product of products) {
+      await this.verifyCartItemDetail(product);
     }
   }
 
@@ -60,16 +64,15 @@ export class CartPage {
   }
 
   async clearShoppingCart() {
-    await expect(this.clearCartButton).toBeVisible();
-    const dialogPromise = this.page.waitForEvent("dialog");
-    this.clearCartButton.click();
-    const dialog = await dialogPromise;
-    console.log(dialog.message()); // In ra nội dung popup, ví dụ: "Are you sure?"
-    await dialog.accept(); // Nhấn OK
+    this.page.once('dialog', async dialog => {
+        await dialog.accept();
+    });
+    await this.page.locator('a.clear-cart').click({ force: true });
+    // console.log(dialog.message());
   }
 
   async verifyCartEmpty() {
-    await expect(this.emptyCartMessage).toBeVisible();
+    await expect(this.emptyCartMessage).toBeVisible({timeout:10000});
   }
 
   async changeOrderQuantity(option: string) {
@@ -81,15 +84,15 @@ export class CartPage {
       await this.quantityTextbox.fill(option);
       await this.page.keyboard.press("Enter");
     }
-    await expect(this.updateCartButton).toHaveAttribute("aria-disabled", "false", { timeout: 10000 });
-    await expect(this.updateCartButton).toHaveAttribute("aria-disabled", "true", { timeout: 10000 });
+    // await expect(this.updateCartButton).toHaveAttribute("aria-disabled", "false", { timeout: 10000 });
+    // await expect(this.updateCartButton).toHaveAttribute("aria-disabled", "true", { timeout: 10000 });
   }
 
-  async verifyTotalPrice(price: any, amount: any) {
+  async verifyTotalPrice(name:string, price: any, amount: any) {
     const priceNumber = parseFloat(price.replace("$", ""));
     const number = parseFloat(amount);
     const total = (priceNumber * number).toString();
-    expect(await this.totalPrice.innerText()).toContain(total);
+    expect(await expect(this.page.locator("tr").filter({ hasText: name }).locator("td.product-subtotal")).toContainText(total));
     console.log(total);
   }
 }

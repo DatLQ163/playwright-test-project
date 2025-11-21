@@ -6,6 +6,7 @@ import { ProductInfoPage } from "page-object/productInfo-page";
 import { ACCOUNT } from "dataTest/Account";
 import { test } from "@playwright/test";
 import { PAGE_NAV } from "dataTest/PageNav";
+import { BasePage } from "page-object/common-page";
 
 test("TC10 - Verify users can post a review", async ({ page }) => {
   const homePage = new HomePage(page);
@@ -13,6 +14,7 @@ test("TC10 - Verify users can post a review", async ({ page }) => {
   const accountPage = new AccountPage(page);
   const productPage = new ProductPage(page);
   const productInfoPage = new ProductInfoPage(page);
+  const basePage = new BasePage(page);
 
   // Step 1: Open browser and go to https://demo.testarchitect.com/
   await homePage.navigate();
@@ -20,6 +22,7 @@ test("TC10 - Verify users can post a review", async ({ page }) => {
   // Step 2 Login with valid credentials
   await homePage.gotoLoginPage();
   await loginPage.login(ACCOUNT.USERNAME, ACCOUNT.PASSWORD);
+  await basePage.resetData();
 
   // Step 3: Go to Shop page
   await accountPage.selectMenuBar(PAGE_NAV.SHOP);
