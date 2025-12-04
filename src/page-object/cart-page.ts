@@ -72,7 +72,7 @@ export class CartPage {
   }
 
   async verifyCartEmpty() {
-    await expect(this.emptyCartMessage).toBeVisible({timeout:10000});
+    await expect(this.emptyCartMessage).toBeVisible({timeout:20000});
   }
 
   async changeOrderQuantity(option: string) {

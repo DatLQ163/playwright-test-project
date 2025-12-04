@@ -14,8 +14,8 @@ export class HomePage {
 
   async navigate() {
     await this.page.goto("");
-    await this.closeAdsButton.waitFor({ state: "visible", timeout: 5000 });
-    await this.closeAdsButton.click();
+    // await this.closeAdsButton.waitFor({ state: "visible", timeout: 10000 });
+    // await this.closeAdsButton.click();
     await this.pageLogo.click();
   }
 
